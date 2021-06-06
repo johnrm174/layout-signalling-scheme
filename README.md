@@ -18,7 +18,7 @@ I plan to publish as a standalone Python Package in PyPI soon
 As far as the code is concerned, I've tried to keep it simple - and readable to those that aren't intimately familiar with
 some of the "advanced" aspects of the python language (e.g. I've avoided most of the object-oriented constructs where possible)
 
-To give it a go, just clone the repository and and run :'my_layout'. This is still very much work in progress but should give 
+To give it a go, just clone the repository and and run 'my_layout'. This is still very much work in progress but should give 
 a good example of how a fully interlocked (and relatively complex) signalling system can be built using the generic functions 
 provided by the 'model-railway-signalling' Package. As my layout is still DC (rather than DCC) it also includes layout power 
 switching. At the moment I have no plans to include this as a feature in the core package.
