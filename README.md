@@ -24,3 +24,4 @@ signalling system can be built using the generic functions provided by the 'mode
 DCC) it also includes layout power switching. At the moment I have no plans to include this as a feature in the core package.
 
 Comments and suggestions welcome - but please be kind - the last time I coded anything it was in Ada96 ;)
+ 
