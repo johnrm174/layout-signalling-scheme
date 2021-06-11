@@ -338,18 +338,18 @@ def refresh_signal_aspects():
 
     # Signal 7 (signal ahead is eather 23 or none)
     if point_switched(8):
-        set_route(7,route_type.RH1,theatre_text="M")
+        set_route(7,route_type.RH1)
         update_signal(7,sig_ahead_id=23)
     else:
-        set_route(7,route_type.MAIN,theatre_text="B")
+        set_route(7,route_type.MAIN)
         update_signal(7)
 
     # Signal 8 (signal ahead is eather 21 or none)
     if point_switched(8):
-        set_route(8,route_type.RH1,theatre_text="M")
+        set_route(8,route_type.RH1)
         update_signal(8,sig_ahead_id=23)
     else:
-        set_route(8,route_type.MAIN,theatre_text="B")
+        set_route(8,route_type.MAIN)
         update_signal(8)
 
     # Signal 4 (signal ahead is 21)
@@ -357,21 +357,21 @@ def refresh_signal_aspects():
 
     # Signal 2 (signal ahead is eather 7 or 8)
     if point_switched(4):
-        set_route(2,route_type.LH1,theatre_text="G")
+        set_route(2,route_type.LH1)
         update_signal(2,sig_ahead_id=7)
     else:
-        set_route(2,route_type.MAIN,theatre_text="3")
+        set_route(2,route_type.MAIN)
         update_signal(2,sig_ahead_id=8)
 
     # Signal 3 (signal ahead is either 4,7 or 8)
     if not point_switched(2):
-        set_route(3,route_type.MAIN,theatre_text="2")
+        set_route(3,route_type.MAIN)
         update_signal(3,sig_ahead_id=4)
     elif point_switched(4):
-        set_route(3,route_type.LH2,theatre_text="G")
+        set_route(3,route_type.LH2)
         update_signal(3,sig_ahead_id=7)
     else:
-        set_route(3,route_type.LH1,theatre_text="3")
+        set_route(3,route_type.LH1)
         update_signal(3,sig_ahead_id=8)
 
     # Signal 1 (signal ahead is 2)
@@ -391,26 +391,26 @@ def refresh_signal_aspects():
     
     # Signal 5 (signal ahead is eather 21 or none)
     if point_switched(2):
-        set_route(5,route_type.LH1,theatre_text="M")
+        set_route(5,route_type.LH1)
         update_signal(5,sig_ahead_id=21)
     else:
-        set_route(5,route_type.MAIN,theatre_text="B")
+        set_route(5,route_type.MAIN)
         update_signal(5)
 
     # Signal 6 (signal ahead is eather 21 or none)
     if point_switched(2):
         update_signal (6,sig_ahead_id=21)
-        set_route(6,route_type.LH1,theatre_text="M")
+        set_route(6,route_type.LH1)
     else:
-        set_route(6,route_type.MAIN,theatre_text="B")
+        set_route(6,route_type.MAIN)
         update_signal (6)
 
     # Signal 10 (signal ahead is eather 5 or 6)
     if point_switched(6):
         update_signal (10,sig_ahead_id=5)
-        set_route(10,route_type.RH1,theatre_text="G")
+        set_route(10,route_type.RH1)
     else:
-        set_route(10,route_type.MAIN,theatre_text="3")
+        set_route(10,route_type.MAIN)
         update_signal (10,sig_ahead_id=6)
 
     # Signal 9 (signal ahead is 10)
@@ -419,20 +419,22 @@ def refresh_signal_aspects():
     # Signal 11 (signal ahead is eather 5,6,12 or 13)
     if point_switched(9):
         if point_switched(6):
-            set_route(11,route_type.RH2,theatre_text="G")
+            set_route(11,route_type.RH2)
             update_signal (11,sig_ahead_id=5)
         else:
-            set_route(11,route_type.RH1,theatre_text="3")
+            set_route(11,route_type.RH1)
             update_signal (11,sig_ahead_id=6)
     else:
         if point_switched(7):
-            set_route(11,route_type.LH1,theatre_text="1")
+            set_route(11,route_type.LH1)
             update_signal (11,sig_ahead_id=13)
         else:
-            set_route(11,route_type.MAIN,theatre_text="M")
+            set_route(11,route_type.MAIN)
             update_signal (11,sig_ahead_id=12)
 
     # Signal 20 (signal ahead is 11)
     update_signal (20,sig_ahead_id=11)
 
     return()
+
+############################################################################################################
