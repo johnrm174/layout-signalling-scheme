@@ -46,7 +46,7 @@ def process_interlocking_west():
         else: unlock_signal(1)
     elif not point_switched(2) and point_switched(4) and not point_switched(5):
         # Route into Goods Loop - Interlock with Signal 5
-        if signal_clear(5) or sunsidary_clear(6): lock_signal(1)
+        if signal_clear(5) or subsidary_clear(6): lock_signal(1)
         else: unlock_signal(1)
     else:
         # no conflicting movements set up
@@ -97,7 +97,7 @@ def process_interlocking_west():
         # Route into Platform 3 - interlock with Signal 6
         if signal_clear(6) or subsidary_clear(6): lock_signal(3)
         else: unlock_signal(3)
-    elif point_switched(5):
+    elif point_switched(5) or not fpl_active(4):
         # No route
         lock_signal(3)
     else:
@@ -206,7 +206,7 @@ def process_interlocking_west():
     else:
         # Route set to goods loop - Interlock with signal 5
         if signal_clear(5) or subsidary_clear(5):lock_signal(14)
-        unlock_signal(14)
+        else: unlock_signal(14)
 
     # ----------------------------------------------------------------------
     # Signal 15 (West box) - Exit from MPD
@@ -298,7 +298,7 @@ def process_interlocking_west():
     elif signal_clear(5) or subsidary_clear(5):
         # movement from goods loop set/cleared
         lock_point(5)
-    elif point_switched(4) and ((signal_clear2) or subsidary_clear(2)):
+    elif point_switched(4) and (signal_clear(2) or subsidary_clear(2)):
         # movement from branch set/cleared
         lock_point(5)
     elif point_switched(2) and point_switched(4) and signal_clear(3):
@@ -352,8 +352,9 @@ def process_interlocking_east():
             lock_subsidary(7)
         else:
             # interlock the main/subsidary signals
-            interlock_main_and_subsidary(9)
-        # Outbound Route is not fully configured (no route onto Up Main)
+            interlock_main_and_subsidary(7)
+    elif point_switched(9) or not fpl_active(9):
+        # No route (points are set for down main)
         lock_signal(7)
         lock_subsidary(7)
     else:
@@ -400,7 +401,7 @@ def process_interlocking_east():
         else: unlock_signal(9)
     elif not point_switched(8) and point_switched(6):
         # Route into Goods Loop - Interlock with Signal 7
-        if signal_clear(7) or sunsidary_clear(7): lock_signal(9)
+        if signal_clear(7) or subsidary_clear(7): lock_signal(9)
         else: unlock_signal(9)
     else:
         # no conflicting movements set up
@@ -444,10 +445,10 @@ def process_interlocking_east():
         # Route set for down main or platform 1
         if not fpl_active(7):
             # Route not fully set/locked
-            lock_signal(1)
+            lock_signal(11)
         else:
             unlock_signal(11)
-    elif not point_switched(8):
+    elif not point_switched(8) or not fpl_active(8) or not fpl_active(6):
         # Route not fully set/locked
         lock_signal(11)
     elif not point_switched(6):
@@ -485,7 +486,7 @@ def process_interlocking_east():
     elif signal_clear(7) or subsidary_clear(7):
         # departure from goods loop set/cleared
         lock_point(6)
-    elif point_switched(8) and point_swittched(9) and signal_clear(11):
+    elif point_switched(8) and point_switched(9) and signal_clear(11):
         # arrival from down main set/cleared
         lock_point(6)
     else:
