@@ -313,7 +313,7 @@ def update_track_power_section_switches():
             set_switch(power_branch_platform,1)
         elif (signal_clear(2) or subsidary_clear(2)) and not point_switched(4):
             set_switch(power_branch_platform,1)
-        elif signal_clear(3) and point_switched(3) and not point_switched(4): 
+        elif signal_clear(3) and point_switched(2) and not point_switched(4): 
             set_switch(power_branch_platform,1)
         # Deal with RH side 
         elif signal_clear(8) or subsidary_clear(8):
@@ -321,7 +321,7 @@ def update_track_power_section_switches():
         elif (signal_clear(10) or subsidary_clear(10)) and not point_switched(6):
             set_switch(power_branch_platform,2)
         elif signal_clear(11) and point_switched(9) and not point_switched(6):
-            set_switch(power_branch_platform,1)
+            set_switch(power_branch_platform,2)
         else:
             clear_switch(power_branch_platform,1)
             clear_switch(power_branch_platform,2)
