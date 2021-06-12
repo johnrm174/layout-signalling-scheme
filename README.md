@@ -12,8 +12,8 @@ fully prototypical signalling schemes to be developed. The signals and points op
 addresses in a manner that should be compatible with the majority of DCC signal/points decoders currently on the market. 
 Track sensors can also be easily integrated (via the Raspberry Pi's GPIO interface) to enable full automatic control.
 
-These core 'library'functions are now in a seperate repository: https://github.com/johnrm174/model-railway-signalling - which
-I plan to publish as a standalone Python Package in PyPI soon
+The Python Package containing the core 'library' functions (together with some simple examples of use) is now in a seperate repository
+(https://github.com/johnrm174/model-railway-signalling) and can also be downloaded directly from PyPI using pip install (https://pypi.org/project/model-railway-signals/)
 
 As far as the code is concerned, I've tried to keep it simple - and readable to those that aren't intimately familiar with
 some of the "advanced" aspects of the python language (e.g. I've avoided most of the object-oriented constructs where possible)
