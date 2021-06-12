@@ -19,12 +19,12 @@ def set_initial_interlocking_conditions():
 #----------------------------------------------------------------------
 # Internal function to interlock a signal with its subsidary aspect
 #----------------------------------------------------------------------
+
 def interlock_main_and_subsidary (sig_id):
     if subsidary_clear(sig_id): lock_signal(sig_id)
     else: unlock_signal(sig_id)
     if signal_clear(sig_id): lock_subsidary(sig_id)
     else: unlock_subsidary(sig_id)
-
 
 #----------------------------------------------------------------------
 # Refresh the interlocking (to be called following any changes)
@@ -62,25 +62,47 @@ def process_interlocking_west():
         lock_signal(2)
         lock_subsidary(2)
     elif not point_switched(4):
-        # Route into Platform 3 - interlock with Signal 6
-        if signal_clear(6) or subsidary_clear(6):
+        # Route set into platform 3
+        if not point_switched(6) and not point_switched(8) and (signal_clear(10) or subsidary_clear(10)):
+            # conflicting movement already cleared into platform 3 from branch
+            lock_signal(2)
+            lock_subsidary(2)
+        elif not point_switched(6) and point_switched(8) and point_switched(9) and signal_clear(11):
+            # conflicting movement already cleared into platform 3 from down main
+            lock_signal(2)
+            lock_subsidary(2)
+        elif signal_clear(6) or subsidary_clear(6):
+            # conflicting departure movement already cleared from platform 3
             lock_signal(2)
             lock_subsidary(2)
         else:
             # Finally interlock the main and subsidary signals
             interlock_main_and_subsidary(2)
-    elif point_switched(5):
-        # No route
+    elif not point_switched(5):
+        # Route set into Goods Loop
+        if not point_switched(6) and signal_clear(16):
+            # conflicting move already cleared into goods loop from yard
+            lock_signal(2)
+            lock_subsidary(2)
+        elif point_switched(6) and not point_switched(8) and (signal_clear(10) or subsidary_clear(10)):
+            # conflicting movement already cleared into goods loop from branch
+            lock_signal(2)
+            lock_subsidary(2)
+        elif point_switched(6) and point_switched(8) and point_switched(9) and signal_clear(11):
+            # conflicting movement already cleared into goods loop from down main
+            lock_signal(2)
+            lock_subsidary(2)
+        elif signal_clear(5) or subsidary_clear(5):
+            # conflicting departure already cleared from goods loop onto branch
+            lock_signal(2)
+            lock_subsidary(2)
+        else:
+            # Finally interlock the main and subsidary signals
+            interlock_main_and_subsidary(2)
+    else:
+        # no route into goods loop (point 5 is switched)
         lock_signal(2)
         lock_subsidary(2)
-    else:
-        # Route into Goods Loop - interlock with Signal 5
-        if signal_clear(6) or subsidary_clear(6):
-            lock_signal(2)
-            lock_subsidary(2)
-        else:
-            # Finally interlock the main and subsidary signals
-            interlock_main_and_subsidary(2)
 
     # ----------------------------------------------------------------------
     # Signal 3 (West box)
@@ -94,17 +116,32 @@ def process_interlocking_west():
         # Route set for up main
         unlock_signal(3)
     elif not point_switched(4):
-        # Route into Platform 3 - interlock with Signal 6
-        if signal_clear(6) or subsidary_clear(6): lock_signal(3)
-        else: unlock_signal(3)
-    elif point_switched(5) or not fpl_active(4):
-        # No route
-        lock_signal(3)
+        # Route set into platform 3
+        if not point_switched(6) and not point_switched(8) and (signal_clear(10) or subsidary_clear(10)):
+            # conflicting movement already cleared into platform 3 from branch
+            lock_signal(3)
+        elif not point_switched(6) and point_switched(8) and point_switched(9) and signal_clear(11):
+            # conflicting movement already cleared into platform 3 from down main
+            lock_signal(3)
+        else:
+            unlock_signal(3)
+    elif not point_switched(5) and fpl_active:
+        # Route set into Goods Loop
+        if not point_switched(6) and signal_clear(16):
+            # conflicting move already cleared into goods loop from yard
+            lock_signal(3)
+        elif point_switched(6) and not point_switched(8) and (signal_clear(10) or subsidary_clear(10)):
+            # conflicting movement already cleared into goods loop from branch
+            lock_signal(3)
+        elif point_switched(6) and point_switched(8) and point_switched(9) and signal_clear(11):
+            # conflicting movement already cleared into goods loop from down main
+            lock_signal(3)
+        else:
+            unlock_signal(3)
     else:
-        # Route into Goods Loop - interlock with Signal 5
-        if signal_clear(6) or subsidary_clear(6): lock_signal(3)
-        else: unlock_signal(3)
-            
+        # No route into goods loop (point 5 is switched or point 4 FPL not active)
+        lock_signal(3)    
+                        
     # ----------------------------------------------------------------------
     # Signal 5 (West box)
     # Main Signal - Routes onto Branch or Down Maiin
@@ -203,6 +240,15 @@ def process_interlocking_west():
     if not point_switched(5):
         # No route
         lock_signal(14)
+    elif not point_switched(6) and signal_clear(16):
+        # conflicting route set up into goods loop from other end of yard
+        lock_signal(14)
+    elif point_switched(6) and not point_switched(8) and (signal_clear(10) or subsidary_clear(10)):
+        # conflicting route set up into goods loop from branch
+        lock_signal(14)
+    elif point_switched(6) and  point_switched(8) and point_switched(9) and signal_clear(11):
+        # conflicting route set up into goods loop from down main
+        lock_signal(14)
     else:
         # Route set to goods loop - Interlock with signal 5
         if signal_clear(5) or subsidary_clear(5):lock_signal(14)
@@ -215,6 +261,15 @@ def process_interlocking_west():
 
     if point_switched(5) or point_switched(4) or not fpl_active(4):
         # No route
+        lock_signal(15)
+    elif not point_switched(6) and signal_clear(16):
+        # conflicting route set up into goods loop from other end of yard
+        lock_signal(15)
+    elif point_switched(6) and not point_switched(8) and (signal_clear(10) or subsidary_clear(10)):
+        # conflicting route set up into goods loop from branch
+        lock_signal(15)
+    elif point_switched(6) and  point_switched(8) and point_switched(9) and signal_clear(11):
+        # conflicting route set up into goods loop from down main
         lock_signal(15)
     else:
         # Route set to goods loop - Interlock with signal 5
@@ -417,22 +472,48 @@ def process_interlocking_east():
         lock_signal(10)
         lock_subsidary(10)
     elif not point_switched(6):
-        # Route into Platform 3 - interlock with Signal 8
-        if signal_clear(8) or subsidary_clear(8):
+        # Route set into platform 3
+        if not point_switched(4) and not point_switched(2) and (signal_clear(2) or subsidary_clear(2)):
+            # conflicting movement already cleared into platform 3 from branch
+            lock_signal(10)
+            lock_subsidary(10)
+        elif not point_switched(4) and point_switched(2) and not point_switched(1) and signal_clear(3):
+            # conflicting movement already cleared into platform 3 from up main
+            lock_signal(10)
+            lock_subsidary(10)
+        elif signal_clear(8) or subsidary_clear(8):
+            # conflicting departure movement already cleared from platform 3
             lock_signal(10)
             lock_subsidary(10)
         else:
             # Finally interlock the main and subsidary signals
-            interlock_main_and_subsidary(10)
+            interlock_main_and_subsidary(10)        
     else:
-        # Route into Goods Loop - interlock with Signal 7
-        if signal_clear(7) or subsidary_clear(7):
+        # Route set into Goods Loop
+        if point_switched(5) and signal_clear(14):
+            # conflicting move already cleared into goods loop from yard
+            lock_signal(10)
+            lock_subsidary(10)
+        elif not point_switched(4) and signal_clear(15):
+            # conflicting move already cleared into goods loop from MPD
+            lock_signal(10)
+            lock_subsidary(10)
+        elif point_switched(4) and not point_switched(2) and (signal_clear(2) or subsidary_clear(2)):
+            # conflicting movement already cleared into goods loop from branch
+            lock_signal(10)
+            lock_subsidary(10)
+        elif point_switched(4) and point_switched(2) and not point_switched(1) and signal_clear(3):
+            # conflicting movement already cleared into goods loop from up main
+            lock_signal(10)
+            lock_subsidary(10)
+        elif signal_clear(5) or subsidary_clear(5):
+            # conflicting departure already cleared from goods loop onto branch
             lock_signal(10)
             lock_subsidary(10)
         else:
             # Finally interlock the main and subsidary signals
             interlock_main_and_subsidary(10)
-            
+             
     # ----------------------------------------------------------------------
     # Signal 11 (East box)
     # Main Signal - Routes into Plat 1, Down Loop, Plat 3 or Goods loop
@@ -452,13 +533,33 @@ def process_interlocking_east():
         # Route not fully set/locked
         lock_signal(11)
     elif not point_switched(6):
-        # Route into Platform 3 - interlock with Signal 8
-        if signal_clear(8) or subsidary_clear(8): lock_signal(11)
-        else: unlock_signal(11)
+        # Route set into platform 3
+        if not point_switched(4) and not point_switched(2) and (signal_clear(2) or subsidary_clear(2)):
+            # conflicting movement already cleared into platform 3 from branch
+            lock_signal(11)
+        elif not point_switched(4) and point_switched(2) and not point_switched(1) and signal_clear(3):
+            # conflicting movement already cleared into platform 3 from up main
+            lock_signal(11)
+        else:
+            # no conflicting movements
+            unlock_signal(11)
     else:
-        # Route into Goods Loop - interlock with Signal 7
-        if signal_clear(7) or subsidary_clear(7): lock_signal(11)
-        else: unlock_signal(11)
+        # Route set into Goods Loop
+        if point_switched(5) and signal_clear(14):
+            # conflicting move already cleared into goods loop from yard
+            lock_signal(11)
+        elif not point_switched(4) and signal_clear(15):
+            # conflicting move already cleared into goods loop from MPD
+            lock_signal(11)
+        elif point_switched(4) and not point_switched(2) and (signal_clear(2) or subsidary_clear(2)):
+            # conflicting movement already cleared into goods loop from branch
+            lock_signal(11)
+        elif point_switched(4) and point_switched(2) and not point_switched(1) and signal_clear(3):
+            # conflicting movement already cleared into goods loop from up main
+            lock_signal(11)
+        else:
+            # no conflicting movements
+            unlock_signal(11)
         
     # ----------------------------------------------------------------------
     # Signal 16 (East box) - Exit from Goods Yard
@@ -467,11 +568,22 @@ def process_interlocking_east():
     if point_switched(10) or point_switched(6) or not fpl_active(6):
         # Route not fully set/locked
         lock_signal(16)
-    elif not point_switched(6) and (signal_clear(7) or subsidary_clear(7)):
-        # Conflicting movement from goods loop already set/cleared
+    elif point_switched(5) and signal_clear(14):
+        # conflicting movement sset up into goods loop from other end of yard
+        lock_signal(16)
+    elif not point_switched(5) and not point_switched(4) and signal_clear(15):
+        # conflicting route set up into goods loop from MPD
+        lock_signal(16)
+    elif not point_switched(5) and point_switched(4) and not point_switched(2) and (signal_clear(2) or subsidary_clear(2)):
+        # conflicting route set up into goods loop from branch
+        lock_signal(16)
+    elif not point_switched(5) and point_switched(4) and  point_switched(2) and not point_switched(1) and signal_clear(3):
+        # conflicting route set up into goods loop from up main
         lock_signal(16)
     else:
-        unlock_signal(16)
+        # Route set from goods loop - Interlock with signal 7
+        if signal_clear(7) or subsidary_clear(7):lock_signal(16)
+        else: unlock_signal(16)
         
     # ----------------------------------------------------------------------
     # Point 6 (East box)
