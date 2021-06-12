@@ -467,6 +467,9 @@ def process_interlocking_east():
     if point_switched(10) or point_switched(6) or not fpl_active(6):
         # Route not fully set/locked
         lock_signal(16)
+    elif not point_switched(6) and (signal_clear(7) or subsidary_clear(7)):
+        # Conflicting movement from goods loop already set/cleared
+        lock_signal(16)
     else:
         unlock_signal(16)
         
