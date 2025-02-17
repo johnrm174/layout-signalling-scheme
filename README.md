@@ -1,5 +1,5 @@
 # layout-signalling-scheme
-/bThis repository is now DEPRECATED - replaced by https://github.com/johnrm174/model-railway-signalling/b
+**This repository is now DEPRECATED - replaced by https://github.com/johnrm174/model-railway-signalling**
 
 A model railway signalling system for my layout written in Python for the Raspberry Pi with a DCC control of signals and points 
 via the Pi-SPROG-3 DCC Command station and train detection via the GPIO ports on the Pi.
